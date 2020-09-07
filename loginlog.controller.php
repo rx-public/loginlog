@@ -242,17 +242,16 @@ class loginlogController extends loginlog
 		return $this->makeObject();
 	}
 
-	public function triggerBeforeModuleInit(&$obj)
+	public function triggerBeforeModuleInit()
 	{
 		$config = $this->getConfig();
-		
-		$logged_info = Context::get('logged_info');
-		// TODO: (Repack) Use to Rhymix Framework. use in the sessions. 
-		if(!$logged_info)
+
+		if(!Rhymix\Framework\Session::getMemberSrl())
 		{
 			return $this->makeObject();
 		}
 
+		$logged_info = Context::get('logged_info');
 		if($config->design->hideLoginlogTab === 'A' || ($config->design->hideLoginlogTab === 'N') && $logged_info->is_admin === 'Y')
 		{
 			getController('member')->addMemberMenu('dispLoginlogHistories', 'cmd_view_loginlog');
@@ -262,16 +261,12 @@ class loginlogController extends loginlog
 
 	public function triggerBeforeModuleProc()
 	{
-		$logged_info = Context::get('logged_info');
-		// TODO: (Repack) Use to Rhymix Framework. use in the sessions. 
-		if(!$logged_info)
+		if(!Rhymix\Framework\Session::getMemberSrl())
 		{
 			return $this->makeObject();
 		}
 
-		/**
-		 * 관리자로 로그인 한 경우 회원 메뉴에 로그인 기록 추적 메뉴 추가
-		 */
+		$logged_info = Context::get('logged_info');
 		if($this->act == 'getMemberMenu' && $logged_info->is_admin == 'Y')
 		{
 			$oMemberController = getController('member');

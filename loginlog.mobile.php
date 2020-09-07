@@ -38,6 +38,7 @@ class loginlogMobile extends loginlogView
 		$this->setTemplatePath($template_path);
 	}
 
+	// TODO We do not need this?
 	function dispLoginlogHistories()
 	{
 		parent::dispLoginlogHistories();
