@@ -23,14 +23,14 @@ class loginlogAdminView extends loginlog
 
 		Context::set('mlayout_list', $mlayout_list);
 
-		$this->config = getModel('loginlog')->getModuleConfig();
+		$config = $this->getConfig();
 
-		Context::set('config', $this->config);
+		Context::set('config', $config);
 
-		$layout_info = $oLayoutModel->getLayout($this->config->layout_srl);
+		$layout_info = $oLayoutModel->getLayout($config->layout_srl);
 		if ($layout_info)
 		{
-			$this->module_info->layout_srl = $this->config->layout_srl;
+			$this->module_info->layout_srl = $config->layout_srl;
 			$this->setLayoutPath($layout_info->path);
 		}
 	}
@@ -40,12 +40,9 @@ class loginlogAdminView extends loginlog
 	 */
 	public function dispLoginlogAdminList()
 	{
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
-
-		if (!isset($config->listSetting) || !is_array($config->listSetting) || count($config->listSetting) < 1)
+		if (!isset(self::$config->listSetting) || !is_array(self::$config->listSetting) || count(self::$config->listSetting) < 1)
 		{
-			$config->listSetting = array(
+			self::$config->listSetting = array(
 				'member.nick_name',
 				'member.user_id',
 				'member.email_address',
@@ -56,14 +53,15 @@ class loginlogAdminView extends loginlog
 			);
 		}
 
-		$columnList = $config->listSetting;
+		$columnList = self::$config->listSetting;
 		$columnList[] = 'loginlog.is_succeed';
 		$columnList[] = 'loginlog.log_srl';
 		$columnList[] = 'loginlog.member_srl';
 		$columnList[] = 'loginlog.platform';
 		$columnList[] = 'loginlog.browser';
 
-		Context::set('loginlog_config', $config);
+		// TODO: Did you set in init? 
+		Context::set('loginlog_config', self::$config);
 		// 목록을 구하기 위한 옵션
 		$args = new stdClass;
 		$args->page = Context::get('page'); ///< 페이지
@@ -133,16 +131,12 @@ class loginlogAdminView extends loginlog
 
 	public function dispLoginlogAdminSetting()
 	{
-		// 로그인 기록 모듈의 설정값을 가져옴
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
-
 		// 생성된 그룹 목록을 가져옴
 		$oMemberModel = getModel('member');
 		$group_list = $oMemberModel->getGroups();
 
 		Context::set('group_list', $group_list);
-		Context::set('config', $config);
+		Context::set('config', self::$config);
 
 		$this->setTemplateFile('setting');
 	}
@@ -154,7 +148,7 @@ class loginlogAdminView extends loginlog
 
 	public function dispLoginlogAdminDesign()
 	{
-		Context::set('config', $this->config);
+		Context::set('config', self::$config);
 
 		// 스킨 목록을 가져옴
 		$skin_list = getModel('module')->getSkins($this->module_path);
@@ -196,12 +190,9 @@ class loginlogAdminView extends loginlog
 	 */
 	public function dispLoginlogAdminMultipleConnectionList()
 	{
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
-
-		if (!isset($config->listSetting) || !is_array($config->listSetting) || count($config->listSetting) < 1)
+		if (!isset(self::$config->listSetting) || !is_array(self::$config->listSetting) || count(self::$config->listSetting) < 1)
 		{
-			$config->listSetting = array(
+			self::$config->listSetting = array(
 				'member.nick_name',
 				'member.user_id',
 				'member.email_address',
@@ -212,14 +203,15 @@ class loginlogAdminView extends loginlog
 			);
 		}
 
-		$columnList = $config->listSetting;
+		$columnList = self::$config->listSetting;
 		$columnList[] = 'loginlog.is_succeed';
 		$columnList[] = 'loginlog.log_srl';
 		$columnList[] = 'loginlog.member_srl';
 		$columnList[] = 'loginlog.platform';
 		$columnList[] = 'loginlog.browser';
 
-		Context::set('loginlog_config', $config);
+		// ??
+		Context::set('loginlog_config', self::$config);
 		// 목록을 구하기 위한 옵션
 		$args = new stdClass;
 		$args->page = Context::get('page'); ///< 페이지

@@ -8,19 +8,13 @@ require_once(_XE_PATH_.'modules/loginlog/loginlog.view.php');
 
 class loginlogMobile extends loginlogView
 {
-	/**
-	 * Support method are 
-	 * dispMemberInfo, dispMemberSignUpForm, dispMemberFindAccount, dispMemberGetTempPassword, dispMemberModifyInfo, dispMemberModifyInfoBefore
-	 */
-
 	function init()
 	{
 		// Get the member configuration
-		$oLoginlogModel = getModel('loginlog');
-		$loginlog_config = $oLoginlogModel->getModuleConfig();
-		Context::set('loginlog_config', $loginlog_config);
+		$config = $this->getConfig();
+		Context::set('loginlog_config', $config);
 
-		$mskin = $loginlog_config->design->mskin;
+		$mskin = $config->design->mskin;
 		// Set the template path
 		$template_path = sprintf('%sm.skins/%s',$this->module_path, $mskin);
 		if(!is_dir($template_path)||!$mskin)
@@ -33,12 +27,11 @@ class loginlogMobile extends loginlogView
 			$template_path = sprintf('%sm.skins/%s', $this->module_path, $mskin);
 		}
 		
-		$this->config = getModel('loginlog')->getModuleConfig();
 		$oLayoutModel = getModel('layout');
-		$layout_info = $oLayoutModel->getLayout($this->config->design->layout_srl);
+		$layout_info = $oLayoutModel->getLayout($config->design->layout_srl);
 		if($layout_info)
 		{
-			$this->module_info->layout_srl = $this->config->design->layout_srl;
+			$this->module_info->layout_srl = $config->design->layout_srl;
 			$this->setLayoutPath($layout_info->path);
 		}
 

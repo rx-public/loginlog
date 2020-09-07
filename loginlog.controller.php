@@ -147,8 +147,7 @@ class loginlogController extends loginlog
 		}
 
 		// 로그인 기록 모듈의 설정값을 구함
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
+		$config = $this->getConfig();
 
 		// 최고관리자는 기록하지 않는다면 패스~
 		if($config->admin_user_log != 'Y' && $member_info->is_admin == 'Y')
@@ -192,13 +191,14 @@ class loginlogController extends loginlog
 		{
 			return false;
 		}
-		
+
 		if(!is_numeric($member_srl))
 		{
 			return false;
 		}
 		
-		$config = loginlogModel::getInstance()->getModuleConfig();
+		$config = $this->getConfig();
+
 		if(is_array($config->target_group) && count($config->target_group) > 0)
 		{
 			// memberModel 객체 생성
@@ -216,6 +216,7 @@ class loginlogController extends loginlog
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -229,8 +230,7 @@ class loginlogController extends loginlog
 			return $this->makeObject();
 		}
 
-		$oModel = getModel('loginlog');
-		$config = $oModel->getModuleConfig();
+		$config = $this->getConfig();
 
 		if($config->delete_logs != 'Y')
 		{
@@ -244,20 +244,17 @@ class loginlogController extends loginlog
 
 	public function triggerBeforeModuleInit(&$obj)
 	{
+		$config = $this->getConfig();
+		
 		$logged_info = Context::get('logged_info');
+		// TODO: (Repack) Use to Rhymix Framework. use in the sessions. 
 		if(!$logged_info)
 		{
 			return $this->makeObject();
 		}
-		
-		$config = getModel('loginlog')->getModuleConfig();
 
-		/**
-	 	* 로그인 기록 메뉴 추가
-	 	*/	
 		if($config->design->hideLoginlogTab === 'A' || ($config->design->hideLoginlogTab === 'N') && $logged_info->is_admin === 'Y')
 		{
-			
 			getController('member')->addMemberMenu('dispLoginlogHistories', 'cmd_view_loginlog');
 		}
 		
@@ -266,6 +263,7 @@ class loginlogController extends loginlog
 	public function triggerBeforeModuleProc()
 	{
 		$logged_info = Context::get('logged_info');
+		// TODO: (Repack) Use to Rhymix Framework. use in the sessions. 
 		if(!$logged_info)
 		{
 			return $this->makeObject();

@@ -11,32 +11,27 @@ class loginlogView extends loginlog
 	 */
 	public function init()
 	{
-		// loginlogModel 객체 생성
 		$oLoginlogModel = getModel('loginlog');
-		// 로그인 기록 모듈의 설정을 가져옵니다
-		$loginlog_config = $oLoginlogModel->getModuleConfig();
+		$config = $this->getConfig();
 
-		// 템플릿에서 쓸 수 있도록 Context::set()
-		Context::set('loginlog_config', $loginlog_config);
+		Context::set('loginlog_config', $config);
 
-		$template_path = sprintf("%sskins/%s/",$this->module_path, $loginlog_config->design->skin);
-		if(!is_dir($template_path)||!$loginlog_config->design->skin)
+		$template_path = sprintf("%sskins/%s/",$this->module_path, $config->design->skin);
+		if(!is_dir($template_path)||!$config->design->skin)
 		{
-			$loginlog_config->design->skin = 'default';
-			$template_path = sprintf("%sskins/%s/",$this->module_path, $loginlog_config->design->skin);
+			$config->design->skin = 'default';
+			$template_path = sprintf("%sskins/%s/",$this->module_path, $config->design->skin);
 		}
 		$this->setTemplatePath($template_path);
 
-		$this->config = $loginlog_config;
-		$skin = $this->config->skin;
-
-		Context::set('loginlog_config', $this->config);
+		//todo(BJRambo): check again.
+		Context::set('loginlog_config', $config);
 
 		$oLayoutModel = getModel('layout');
-		$layout_info = $oLayoutModel->getLayout($this->config->design->layout_srl);
+		$layout_info = $oLayoutModel->getLayout($config->design->layout_srl);
 		if($layout_info)
 		{
-			$this->module_info->layout_srl = $this->config->design->layout_srl;
+			$this->module_info->layout_srl = $config->design->layout_srl;
 			$this->setLayoutPath($layout_info->path);
 		}
 	}
@@ -46,18 +41,15 @@ class loginlogView extends loginlog
 	 */
 	public function dispLoginlogHistories()
 	{
-		// 로그인 정보를 가져옵니다
+		// TODO(repack) use to rhymix framework.
 		$logged_info = Context::get('logged_info');
-		// 로그인 하지 않은 경우 권한이 없다고 에러 출력
 		if(!$logged_info)
 		{
 			return $this->stop('msg_not_permitted');
 		}
-
-		$config = getModel('loginlog')->getModuleConfig();
-		if($config->hideLoginlogTab === 'N')
+		
+		if(self::$config->hideLoginlogTab === 'N')
 		{
-			
 			return $this->makeObject();
 		}
 
@@ -69,9 +61,6 @@ class loginlogView extends loginlog
 		$args->sort_index = 'log_srl';
 		$args->order_type = 'desc';
 		$args->member_srl = $logged_info->member_srl;
-
-		$search_keyword = Context::get('search_keyword');
-		$search_target = trim(Context::get('search_target'));
 
 		$output = executeQueryArray('loginlog.getLoginlogList', $args);
 

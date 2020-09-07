@@ -19,9 +19,7 @@ class loginlogAdminController extends loginlog
 	 */
 	public function procLoginlogAdminInsertConfig()
 	{
-		// 기존 DB에 저장된 설정값을 가져옵니다
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
+		$config = $this->getConfig();
 
 		// 넘어온 설정값과 기존에 저장된 설정값을 합칩니다.
 		$config->delete_logs = Context::get('delete_logs');
@@ -67,8 +65,7 @@ class loginlogAdminController extends loginlog
 		// GET 방식으로 접근하는 것을 방지합니다.
 		if(Context::getRequestMethod() == 'GET') return $this->makeObject(-1, 'msg_invalid_request');
 
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
+		$config = $this->getConfig();
 
 		// 불필요한 값을 제거합니다.
 		unset($config->body);
@@ -101,8 +98,7 @@ class loginlogAdminController extends loginlog
 		// GET 방식으로 접근하는 것을 방지합니다.
 		if(Context::getRequestMethod() == 'GET') return $this->makeObject(-1, 'msg_invalid_request');
 
-		$oLoginlogModel = getModel('loginlog');
-		$config = $oLoginlogModel->getModuleConfig();
+		$config = $this->getConfig();
 
 		// 불필요한 값을 제거합니다.
 		unset($config->body);
