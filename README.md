@@ -1,4 +1,4 @@
-XpressEngine(XE) Loginlog Module
+Rhymix(RX) Loginlog Module
 ==========================================
 [![Latest release](http://img.shields.io/github/release/xe-public/xe-module-loginlog.svg)](https://github.com/xe-public/xe-module-loginlog/releases)
 [![License](http://img.shields.io/badge/license-GPL%20v2-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html)
@@ -11,22 +11,22 @@ XpressEngine(XE) Loginlog Module
 
 Maintainers
 ------
-* website : https://github.com/xe-public
+* website : https://github.com/rx-public
 
-[@smaker (SimpleCode)](http://github.com/smaker)
+[@BJRambo (SimpleCode)](http://github.com/BJRambo)
 
 Contributors
 ------------
 
-[@smaker (SimpleCode)](https://github.com/smaker)
 [@bjrambo (BJRambo)](https://github.com/bjrambo)
+[@smaker (SimpleCode)](https://github.com/smaker)
 @ned3y2k
 [@misol (Misol)](https://github.com/misol)
 [@soonjae (카르마)](https://github.com/soonjae)
 
 Copyright (ko)
 ---------------------
-Copyright 2013 XE Public.
+Copyright 2020 RX Public.
 
 이 프로그램은 자유 소프트웨어입니다. 소프트웨어의 피양도자는 자유 소프트웨어 재단이 공표한 **GNU 일반 공중 사용 허가서** 2판 또는 그 이후 판을 임의로 선택해서, 그 규정에 따라 프로그램을 개작하거나 재배포할 수 있습니다.
 
