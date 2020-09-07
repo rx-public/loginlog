@@ -72,31 +72,35 @@ class loginlogController extends loginlog
 			return $this->makeObject();
 		}
 
-		/**
-		 * 입력한 비밀번호가 없다면 실행 중단
-		 * 로그인 유지를 선택하고 로그인을 한 경우 비밀번호 입력 없이 로그인 과정을 거치게 됨
-		 */
 		if(!$obj->password)
 		{
 			return $this->makeObject();
 		}
 
-		// 대상 회원의 비밀번호와 회원 번호를 구함
-		$output = executeQuery('loginlog.getMemberPassword', $obj);
+		$oMemberModel = memberModel::getInstance();
+		$memberConfig = $oMemberModel->getMemberConfig();
+		$args = new stdClass();
+		if($memberConfig->identifier == 'email_address')
+		{
+			$args->email_address = $obj->user_id;
+		}
+		else
+		{
+			$args->user_id = $obj->user_id;
+		}
 
+		$loginMemberInfo = executeQuery('loginlog.getMemberPassword', $args)->data;
+		
 		// 존재하지 않는 회원이라면 기록하지 않음
-		if(!$output->data)
+		if(!$loginMemberInfo)
 		{
 			return $this->makeObject();
 		}
 
-		$member_srl = $output->data->member_srl;
+		$member_srl = $loginMemberInfo->member_srl;
 
 		// 대상 회원의 비밀번호
-		$password = $output->data->password;
-
-		// memberModel 객체 생성
-		$oMemberModel = getModel('member');
+		$password = $loginMemberInfo->password;
 
 		// 비밀번호가 맞다면 기록하지 않음
 		if($oMemberModel->isValidPassword($password, $obj->password))
@@ -104,36 +108,12 @@ class loginlogController extends loginlog
 			return $this->makeObject();
 		}
 
-		// loginlogModel 객체 생성
-		$oLoginlogModel = getModel('loginlog');
-
-		// 로그인 기록 모듈의 설정을 가져옵니다
-		$config = $oLoginlogModel->getModuleConfig();
-
 		// 로그인 기록 대상 그룹이 설정되어 있다면...
-		if(is_array($config->target_group) && count($config->target_group) > 0)
+		if(!$this->checkTheGroupConfig($member_srl))
 		{
-			$isTargetGroup  = FALSE;
-
-			// 소속된 그룹을 구합니다
-			$group_list = $oMemberModel->getMemberGroups($member_srl);
-
-			// loop를 돌면서 해당 그룹에 소속되어 있는 지 확인합니다
-			foreach($group_list as $group_srl => &$group_title)
-			{
-				if(in_array($group_srl, $config->target_group))
-				{
-					$isTargetGroup = TRUE;
-					break;
-				}
-			}
-
-			if(!$isTargetGroup)
-			{
-				return $this->makeObject();
-			}
+			return $this->makeObject();
 		}
-
+		
 		require _XE_PATH_ . 'modules/loginlog/libs/Browser.php';
 
 		$browser = new Browser();
@@ -141,8 +121,8 @@ class loginlogController extends loginlog
 		$browserVersion = $browser->getVersion();
 		$platform = $browser->getPlatform();
 
-		$user_id = $output->data->user_id;
-		$email_address = $output->data->email_address;
+		$user_id = $loginMemberInfo->user_id;
+		$email_address = $loginMemberInfo->email_address;
 
 		// 로그인 기록을 남깁니다
 		$log_info = new stdClass;
@@ -159,7 +139,7 @@ class loginlogController extends loginlog
 	/**
 	 * @brief 로그인 성공 후 실행되는 트리거
 	 */
-	public function triggerAfterLogin(&$member_info)
+	public function triggerAfterLogin($member_info)
 	{
 		if(!$member_info->member_srl)
 		{
@@ -171,33 +151,16 @@ class loginlogController extends loginlog
 		$config = $oLoginlogModel->getModuleConfig();
 
 		// 최고관리자는 기록하지 않는다면 패스~
-		if($config->admin_user_log != 'Y' && $member_info->is_admin == 'Y') return $this->makeObject();
+		if($config->admin_user_log != 'Y' && $member_info->is_admin == 'Y')
+		{
+			return $this->makeObject();
+		}
+
 
 		// 로그인 기록 대상 그룹이 설정되어 있다면...
-		if(is_array($config->target_group) && count($config->target_group) > 0)
+		if(!$this->checkTheGroupConfig($member_info->member_srl))
 		{
-			$isTargetGroup  = FALSE;
-
-			// memberModel 객체 생성
-			$oMemberModel = getModel('member');
-
-			// 소속된 그룹을 구합니다
-			$group_list = $oMemberModel->getMemberGroups($member_info->member_srl);
-
-			// loop를 돌면서 해당 그룹에 소속되어 있는 지 확인합니다
-			foreach($group_list as $group_srl => &$group_title)
-			{
-				if(in_array($group_srl, $config->target_group))
-				{
-					$isTargetGroup = TRUE;
-					break;
-				}
-			}
-
-			if(!$isTargetGroup)
-			{
-				return $this->makeObject();
-			}
+			return $this->makeObject();
 		}
 
 		require _XE_PATH_ . 'modules/loginlog/libs/Browser.php';
@@ -217,6 +180,43 @@ class loginlogController extends loginlog
 		$this->insertLoginlog($log_info);
 
 		return $this->makeObject();
+	}
+
+	/**
+	 * @param int|string $member_srl
+	 * @return Boolean
+	 */
+	public function checkTheGroupConfig($member_srl)
+	{
+		if(!$member_srl)
+		{
+			return false;
+		}
+		
+		if(!is_numeric($member_srl))
+		{
+			return false;
+		}
+		
+		$config = loginlogModel::getInstance()->getModuleConfig();
+		if(is_array($config->target_group) && count($config->target_group) > 0)
+		{
+			// memberModel 객체 생성
+			$oMemberModel = getModel('member');
+
+			// 소속된 그룹을 구합니다
+			$group_list = $oMemberModel->getMemberGroups($member_srl);
+
+			// loop를 돌면서 해당 그룹에 소속되어 있는 지 확인합니다
+			foreach($group_list as $group_srl => $group_title)
+			{
+				if(in_array($group_srl, $config->target_group))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
