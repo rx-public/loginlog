@@ -45,8 +45,6 @@ class loginlog extends ModuleObject
 	 **/
 	public function checkUpdate()
 	{
-		$oModuleModel = getModel('module');
-
 		if(!$this->checkTrigger())
 		{
 			return true;
@@ -129,9 +127,6 @@ class loginlog extends ModuleObject
 	{
 		// db가 큰 경우 시간 초과로 모듈 업데이트가 되지 않는 경우를 방지
 		@set_time_limit(0);
-
-		$oModuleModel = getModel('module');
-		$oModuleController = getController('module');
 
 		$this->insertTrigger();
 
