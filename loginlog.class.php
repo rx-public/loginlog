@@ -8,7 +8,7 @@
 class loginlog extends ModuleObject
 {
 	private $triggers = array(
-		// member.doLogin 트리거
+		array('member.doLogin'		, 'loginlog', 'controller', 'triggerBeforeLogin',		'before'),
 		array('member.doLogin'		, 'loginlog', 'controller', 'triggerAfterLogin',		'after'),
 		array('member.deleteMember'	, 'loginlog', 'controller', 'triggerDeleteMember',		'after'),
 		array('moduleHandler.init'	, 'loginlog', 'controller', 'triggerBeforeModuleInit',	'after'),
