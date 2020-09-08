@@ -38,7 +38,7 @@ class loginlogView extends loginlog
 		$logged_info = Context::get('logged_info');
 		if(!Rhymix\Framework\Session::getMemberSrl())
 		{
-			return $this->makeObject();
+			return $this->makeObject(-1, 'msg_not_permitted');
 		}
 		
 		if(self::$config->hideLoginlogTab === 'N')
