@@ -35,11 +35,10 @@ class loginlogView extends loginlog
 	 */
 	public function dispLoginlogHistories()
 	{
-		// TODO(repack) use to rhymix framework.
 		$logged_info = Context::get('logged_info');
-		if(!$logged_info)
+		if(!Rhymix\Framework\Session::getMemberSrl())
 		{
-			return $this->stop('msg_not_permitted');
+			return $this->makeObject();
 		}
 		
 		if(self::$config->hideLoginlogTab === 'N')
