@@ -11,11 +11,8 @@ class loginlogView extends loginlog
 	 */
 	public function init()
 	{
-		$oLoginlogModel = getModel('loginlog');
 		$config = $this->getConfig();
-
-		Context::set('loginlog_config', $config);
-
+		
 		$template_path = sprintf("%sskins/%s/",$this->module_path, $config->design->skin);
 		if(!is_dir($template_path)||!$config->design->skin)
 		{
@@ -23,9 +20,6 @@ class loginlogView extends loginlog
 			$template_path = sprintf("%sskins/%s/",$this->module_path, $config->design->skin);
 		}
 		$this->setTemplatePath($template_path);
-
-		//todo(BJRambo): check again.
-		Context::set('loginlog_config', $config);
 
 		$oLayoutModel = getModel('layout');
 		$layout_info = $oLayoutModel->getLayout($config->design->layout_srl);
