@@ -60,7 +60,6 @@ class loginlogAdminView extends loginlog
 		$columnList[] = 'loginlog.platform';
 		$columnList[] = 'loginlog.browser';
 
-		// TODO: Did you set in init? 
 		Context::set('loginlog_config', self::$config);
 		// 목록을 구하기 위한 옵션
 		$args = new stdClass;
