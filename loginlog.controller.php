@@ -116,19 +116,16 @@ class loginlogController extends loginlog
 		
 		require _XE_PATH_ . 'modules/loginlog/libs/Browser.php';
 
-		$browser = new Browser();
-		$browserName = $browser->getBrowser();
-		$browserVersion = $browser->getVersion();
-		$platform = $browser->getPlatform();
-
 		$user_id = $loginMemberInfo->user_id;
 		$email_address = $loginMemberInfo->email_address;
 
+		$browserInfo = Rhymix\Framework\UA::getBrowserInfo();
+		
 		// 로그인 기록을 남깁니다
 		$log_info = new stdClass;
 		$log_info->member_srl = $member_srl;
-		$log_info->platform = $platform;
-		$log_info->browser = $browserName . ' ' . $browserVersion;
+		$log_info->platform = $browserInfo->os . ' ' . $browserInfo->os_version;
+		$log_info->browser = $browserInfo->browser . ' ' . $browserInfo->version;
 		$log_info->user_id = $user_id;
 		$log_info->email_address = $email_address;
 		$this->insertLoginlog($log_info, false);
@@ -162,18 +159,13 @@ class loginlogController extends loginlog
 			return $this->makeObject();
 		}
 
-		require _XE_PATH_ . 'modules/loginlog/libs/Browser.php';
-
-		$browser = new Browser();
-		$browserName = $browser->getBrowser();
-		$browserVersion = $browser->getVersion();
-		$platform = $browser->getPlatform();
-
+		$browserInfo = Rhymix\Framework\UA::getBrowserInfo();
+		
 		// 로그인 기록을 남깁니다
 		$log_info = new stdClass;
 		$log_info->member_srl = $member_info->member_srl;
-		$log_info->platform = $platform;
-		$log_info->browser = $browserName . ' ' . $browserVersion;
+		$log_info->platform = $browserInfo->os . ' ' . $browserInfo->os_version;
+		$log_info->browser = $browserInfo->browser . ' ' . $browserInfo->version;
 		$log_info->user_id = $member_info->user_id;
 		$log_info->email_address = $member_info->email_address;
 		$this->insertLoginlog($log_info);
@@ -215,6 +207,10 @@ class loginlogController extends loginlog
 					return true;
 				}
 			}
+		}
+		else
+		{
+			return true;
 		}
 		
 		return false;
