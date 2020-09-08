@@ -163,7 +163,7 @@ class loginlogAdminView extends loginlog
 
 	public function dispLoginlogAdminIpSearch()
 	{
-		$config = getModel('loginlog')->getModuleConfig();
+		$config = $this->getConfig();
 		
 		if (!isset($config->admin_kisa_key))
 		{
@@ -171,16 +171,16 @@ class loginlogAdminView extends loginlog
 		}
 		
 		$ip = Context::get('ipaddress');
+
+		$kisaJsonString = FileHandler::getRemoteResource("http://whois.kisa.or.kr/openapi/whois.jsp?query=$ip&key=$config->admin_kisa_key&answer=json");
+		$contentObject = json_decode($kisaJsonString);
+		
+		Context::set('content', $contentObject);
+		Context::set('whois', $contentObject->whois);
 		
 		$this->setLayoutPath('./common/tpl/');
 		$this->setLayoutFile('popup_layout');
 		$this->setTemplatePath("$this->module_path/tpl");
-		//TODO : 일부 XE 버전에서 getRemoteResource 함수가 정상적으로 작동하지 않을 가능성이 있음. 이 부분을 curl으로 대체해야함.
-		//TODO : change XML to Json.
-		$kisaXMLString = FileHandler::getRemoteResource("http://whois.kisa.or.kr/openapi/whois.jsp?query=$ip&key=$config->admin_kisa_key&answer=xml");
-		$oXmlParser = new XmlParser();
-		$content = $oXmlParser->parse($kisaXMLString);
-		Context::set('content', $content);
 		$this->setTemplateFile('ip_search');
 	}
 
