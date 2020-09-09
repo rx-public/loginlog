@@ -9,6 +9,12 @@ Rhymix(RX) Loginlog Module
 
 이 소프트웨어는 GPL 을 채택한 오픈 소스 소프트웨어(OSS)로써 자유롭게 사용할 수 있는 자유 소프트웨어입니다. 이 라이선스의 조건을 준수하는 조건하에 누구나 자유롭게 사용할 수 있으며 개작 할 수 있습니다.
 
+##사용조건
+
+1. [라이믹스 Next 브랜치](https://github.com/rhymix/rhymix/tree/next) 의 버전이상
+2. PHP7.0 이상 (라이믹스 최소 PHP버전)
+
+
 Maintainers
 ------
 * website : https://github.com/rx-public
@@ -35,7 +41,7 @@ Copyright 2020 RX Public.
 
 Copyright (en)
 --------------
-Copyright 2013 XE Public.
+Copyright 2013 RX Public.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the **GNU General Public License** as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
