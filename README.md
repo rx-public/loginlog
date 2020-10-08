@@ -2,6 +2,7 @@ Rhymix(RX) Loginlog Module
 ==========================================
 [![Latest release](http://img.shields.io/github/release/xe-public/xe-module-loginlog.svg)](https://github.com/xe-public/xe-module-loginlog/releases)
 [![License](http://img.shields.io/badge/license-GPL%20v2-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frx-public%2Fxe-module-loginlog.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frx-public%2Fxe-module-loginlog?ref=badge_shield)
 
 개요
 ---
@@ -48,3 +49,7 @@ This program is free software; you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frx-public%2Fxe-module-loginlog.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Frx-public%2Fxe-module-loginlog?ref=badge_large)
