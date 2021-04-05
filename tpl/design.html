@@ -1,7 +1,7 @@
 <include target="header.html" />
 
 <load target="./js/design_config.js" />
-<form method="post" class="x_form-horizontal">
+<form method="post" action="{Context::getRequestUri()}" class="x_form-horizontal">
 	<input type="hidden" name="module" value="loginlog">
 	<input type="hidden" name="act" value="procLoginlogAdminInsertDesignConfig">
 	<div class="x_control-group">

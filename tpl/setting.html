@@ -4,7 +4,7 @@
 	<p>{$XE_VALIDATOR_MESSAGE}</p>
 </div>
 
-<form ruleset="insertLoginlogConfig" action="./" method="post" class="x_form-horizontal section">
+<form ruleset="insertLoginlogConfig" action="{Context::getRequestUri()}" method="post" class="x_form-horizontal section">
 	<input type="hidden" name="module" value="loginlog" />
 	<input type="hidden" name="act" value="procLoginlogAdminInsertConfig" />
 	<input type="hidden" name="xe_validator_id" value="modules/loginlog/tpl/compatibility/maserati/setting/1" />
@@ -40,7 +40,7 @@
 			<input type="text" id="admin_kisa_key" name="admin_kisa_key" value="{$config->admin_kisa_key}" />
 			<p>{$lang->about_admin_kisa_key}</p>
 		</div>
-	<div/>
+	</div>
 	
 	<h1>{$lang->cmd_export_to_xls}</h1>
 	<p class="x_well">{$lang->desc_exportToXls}</p>
